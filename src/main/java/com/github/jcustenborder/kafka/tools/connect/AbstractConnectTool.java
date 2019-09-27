@@ -57,6 +57,15 @@ public abstract class AbstractConnectTool implements Tool {
         .help("Directory to read connector configuration(s) from.");
   }
 
+  protected Argument addConfigPathArgument(ArgumentParser parser) {
+    return parser.addArgument("--config-path")
+        .action(store())
+        .dest(ConnectConstants.DEST_CONFIG_PATH)
+        .type(File.class)
+        .help("Location on the local file system to read the config from.");
+  }
+
+
   protected Argument addOutputFormatArgument(ArgumentParser parser) {
     return parser.addArgument("--output-format")
         .action(store())
@@ -65,6 +74,10 @@ public abstract class AbstractConnectTool implements Tool {
         .required(false)
         .setDefault(ConfigHelper.OutputFormat.Json)
         .help("The output format used to write configuration(s) to the file system.");
+  }
+
+  protected String connector(Namespace namespace) {
+    return namespace.getString(ConnectConstants.DEST_CONNECTOR);
   }
 
   protected File outputFile(Namespace namespace) {
@@ -77,6 +90,10 @@ public abstract class AbstractConnectTool implements Tool {
 
   protected File inputPath(Namespace namespace) {
     return namespace.get(ConnectConstants.DEST_INPUT_PATH);
+  }
+
+  protected File configPath(Namespace namespace) {
+    return namespace.get(ConnectConstants.DEST_CONFIG_PATH);
   }
 
   protected ConfigHelper.OutputFormat outputFormat(Namespace namespace) {

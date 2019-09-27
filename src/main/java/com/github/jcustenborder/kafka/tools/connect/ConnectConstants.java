@@ -10,4 +10,5 @@ public class ConnectConstants {
   public static final String DEST_OUTPUT_FILE = "outputFile";
   public static final String DEST_OUTPUT_PATH = "outputPath";
   public static final String DEST_INPUT_PATH = "inputPath";
+  public static final String DEST_CONFIG_PATH = "configPath";
 }
