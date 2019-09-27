@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+export CLASSPATH="$(dirname $0)/../lib/*"
+kafka-run-class com.github.jcustenborder.kafka.tools.broker.WaitForISRTool
