@@ -19,7 +19,7 @@ import static net.sourceforge.argparse4j.impl.Arguments.store;
 import static net.sourceforge.argparse4j.impl.Arguments.storeTrue;
 
 
-public class DownloadExampleTool extends AbstractConnectorTool {
+public class DownloadExampleTool extends AbstractConnectTool {
   private static final Logger log = LoggerFactory.getLogger(DownloadExampleTool.class);
 
   @Override

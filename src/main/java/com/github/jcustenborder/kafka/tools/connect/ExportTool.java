@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class ExportTool extends AbstractConnectorTool {
+public class ExportTool extends AbstractConnectTool {
   private static final Logger log = LoggerFactory.getLogger(ExportTool.class);
 
   @Override

@@ -1,22 +1,17 @@
 package com.github.jcustenborder.kafka.tools.connect;
 
 import com.github.jcustenborder.kafka.connect.client.KafkaConnectClient;
-import com.github.jcustenborder.kafka.connect.client.KafkaConnectException;
 import com.github.jcustenborder.kafka.tools.Table;
-import net.sourceforge.argparse4j.inf.Argument;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static net.sourceforge.argparse4j.impl.Arguments.store;
 
-
-public class DeleteTool extends AbstractConnectorTool {
+public class DeleteTool extends AbstractConnectTool {
   private static final Logger log = LoggerFactory.getLogger(DeleteTool.class);
 
   @Override

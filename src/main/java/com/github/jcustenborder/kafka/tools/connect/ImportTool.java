@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class ImportTool extends AbstractConnectorTool {
+public class ImportTool extends AbstractConnectTool {
   private static final Logger log = LoggerFactory.getLogger(ImportTool.class);
 
   @Override

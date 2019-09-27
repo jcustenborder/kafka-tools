@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 
-public class RestartConnectorTool extends AbstractConnectorTool {
-  private static final Logger log = LoggerFactory.getLogger(RestartConnectorTool.class);
+public class RestartConnectTool extends AbstractConnectTool {
+  private static final Logger log = LoggerFactory.getLogger(RestartConnectTool.class);
 
   @Override
   public String name() {

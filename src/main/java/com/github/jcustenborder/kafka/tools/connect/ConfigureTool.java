@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 
-public class ConfigureTool extends AbstractConnectorTool {
+public class ConfigureTool extends AbstractConnectTool {
   private static final Logger log = LoggerFactory.getLogger(ConfigureTool.class);
 
   @Override

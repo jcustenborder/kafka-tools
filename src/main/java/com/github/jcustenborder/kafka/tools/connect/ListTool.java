@@ -8,10 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 
-public class ListTool extends AbstractConnectorTool {
+public class ListTool extends AbstractConnectTool {
   private static final Logger log = LoggerFactory.getLogger(ListTool.class);
 
   @Override

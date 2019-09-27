@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 
-public class RestartTaskTool extends AbstractConnectorTool {
+public class RestartTaskTool extends AbstractConnectTool {
   private static final Logger log = LoggerFactory.getLogger(RestartTaskTool.class);
 
   @Override

@@ -15,12 +15,12 @@ import java.util.concurrent.Executors;
 
 import static net.sourceforge.argparse4j.impl.Arguments.store;
 
-public abstract class AbstractConnectorTool implements Tool {
+public abstract class AbstractConnectTool implements Tool {
 
 
   protected ExecutorService executorService;
 
-  public AbstractConnectorTool() {
+  public AbstractConnectTool() {
     executorService = Executors.newScheduledThreadPool(2);
   }
 

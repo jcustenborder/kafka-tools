@@ -1,13 +1,12 @@
 package com.github.jcustenborder.kafka.tools.connect;
 
-import com.github.jcustenborder.kafka.tools.Tool;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CreateConnectorTool extends AbstractConnectorTool {
-  private static final Logger log = LoggerFactory.getLogger(CreateConnectorTool.class);
+public class CreateConnectTool extends AbstractConnectTool {
+  private static final Logger log = LoggerFactory.getLogger(CreateConnectTool.class);
 
   @Override
   public String name() {

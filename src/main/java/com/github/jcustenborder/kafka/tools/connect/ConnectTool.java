@@ -1,8 +1,8 @@
 package com.github.jcustenborder.kafka.tools.connect;
 
+import com.github.jcustenborder.kafka.tools.ConsoleFormat;
 import com.github.jcustenborder.kafka.tools.MultiCommandTool;
 import com.github.jcustenborder.kafka.tools.ObjectMapperFactory;
-import com.github.jcustenborder.kafka.tools.ConsoleFormat;
 import com.github.jcustenborder.kafka.tools.Tool;
 import com.github.jcustenborder.kafka.tools.ToolRunner;
 import net.sourceforge.argparse4j.inf.Argument;
@@ -40,14 +40,14 @@ public class ConnectTool extends MultiCommandTool {
   @Override
   protected List<Tool> tools() {
     return Arrays.asList(
-        new CreateConnectorTool(),
-        new RestartConnectorTool(),
+        new CreateConnectTool(),
+        new RestartConnectTool(),
         new RestartTaskTool(),
         new ConfigureTool(),
         new ImportTool(),
         new ExportTool(),
         new ListTool(),
-        new ConnectorPluginsTool(),
+        new ConnectPluginsTool(),
         new DeleteTool(),
         new DownloadExampleTool(),
         new StatusTool()
@@ -63,7 +63,8 @@ public class ConnectTool extends MultiCommandTool {
     );
     Argument connectConfigArgument = parser.addArgument("--connect-config")
         .action(store())
-        .help("Location of the connect config file.")
+        .help("Location of the config file this utility will use to store connection information" +
+            " about the Kafka Connect Cluster.")
         .dest(ConnectConstants.DEST_CONNECT_CONFIG)
         .setDefault(connectOptionsFile)
         .type(File.class)
@@ -88,7 +89,7 @@ public class ConnectTool extends MultiCommandTool {
 
     Argument hostArgument = parser.addArgument("--host")
         .action(store())
-        .help("Kafka Connect host name.")
+        .help("Host of the Kafka Connect cluster to connect to.")
         .dest(ConnectConstants.DEST_HOST)
         .required(false)
         .setDefault(null == defaultHost ? "localhost" : defaultHost)
@@ -103,13 +104,12 @@ public class ConnectTool extends MultiCommandTool {
     Argument outputFormatArgument = parser.addArgument("--output-format")
         .action(store())
         .dest(ConnectConstants.DEST_CONSOLE_OUTPUT_FORMAT)
-        .help("")
+        .help("The format written to the console when information is displayed.")
         .required(false)
         .type(ConsoleFormat.class)
         .setDefault(ConsoleFormat.Table);
 
     super.options(parser);
-
   }
 
   @Override

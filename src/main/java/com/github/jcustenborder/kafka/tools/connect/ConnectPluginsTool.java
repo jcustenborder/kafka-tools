@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 
-public class ConnectorPluginsTool extends AbstractConnectorTool {
-  private static final Logger log = LoggerFactory.getLogger(ConnectorPluginsTool.class);
+public class ConnectPluginsTool extends AbstractConnectTool {
+  private static final Logger log = LoggerFactory.getLogger(ConnectPluginsTool.class);
 
   @Override
   public String name() {

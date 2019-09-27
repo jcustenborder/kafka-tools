@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class StatusTool extends AbstractConnectorTool {
+public class StatusTool extends AbstractConnectTool {
   private static final Logger log = LoggerFactory.getLogger(StatusTool.class);
 
   @Override
