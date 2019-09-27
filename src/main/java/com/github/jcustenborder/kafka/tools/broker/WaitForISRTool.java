@@ -15,21 +15,38 @@
  */
 package com.github.jcustenborder.kafka.tools.broker;
 
+import com.github.jcustenborder.kafka.tools.AdminClientHelper;
 import com.github.jcustenborder.kafka.tools.CommonArguments;
+import com.github.jcustenborder.kafka.tools.ObjectMapperFactory;
 import com.github.jcustenborder.kafka.tools.Tool;
 import com.github.jcustenborder.kafka.tools.ToolRunner;
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 import net.sourceforge.argparse4j.inf.Argument;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.KafkaAdminClient;
+import org.apache.kafka.common.TopicPartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static net.sourceforge.argparse4j.impl.Arguments.store;
 
 public class WaitForISRTool implements Tool {
   private static final Logger log = LoggerFactory.getLogger(WaitForISRTool.class);
+  static final String DEST_MAX_WAIT_TIME_UNIT = "maxWaitTimeUnit";
+  static final String DEST_MAX_WAIT_TIME = "maxWaitTime";
+  static final String DEST_TIME_BETWEEN_CHECKS_UNIT = "timeBetweenChecksUnit";
+  static final String DEST_TIME_BETWEEN_CHECKS = "timeBetweenChecks";
+  static final String DEST_BROKERS = "brokers";
 
   public static void main(String... args) throws Exception {
     ToolRunner.run(new WaitForISRTool(), args);
@@ -50,11 +67,12 @@ public class WaitForISRTool implements Tool {
     final Argument bootstrapServerArgument = CommonArguments.bootstrapServer(parser);
     final Argument outputFileArgument = CommonArguments.outputFile(parser, false);
 
+
     final Argument maxWaitTimeUnit = parser.addArgument("--max-wait-time-unit")
         .action(store())
         .help("The unit of time to wait.")
         .type(TimeUnit.class)
-        .dest("maxWaitTimeUnit")
+        .dest(DEST_MAX_WAIT_TIME_UNIT)
         .setDefault(TimeUnit.MINUTES);
 
     final Argument maxWaitTime = parser.addArgument("--max-wait-time")
@@ -62,13 +80,13 @@ public class WaitForISRTool implements Tool {
         .help("The amount of time to wait.")
         .type(Long.class)
         .setDefault(10L)
-        .dest("maxWaitTime");
+        .dest(DEST_MAX_WAIT_TIME);
 
     final Argument timeBetweenChecksUnit = parser.addArgument("--time-between-checks-unit")
         .action(store())
         .help("The unit of time to wait.")
         .type(TimeUnit.class)
-        .dest("timeBetweenChecksUnit")
+        .dest(DEST_TIME_BETWEEN_CHECKS_UNIT)
         .setDefault(TimeUnit.SECONDS);
 
     final Argument timeBetweenChecks = parser.addArgument("--time-between-checks")
@@ -76,83 +94,79 @@ public class WaitForISRTool implements Tool {
         .help("The amount of time to wait.")
         .type(Long.class)
         .setDefault(30L)
-        .dest("timeBetweenChecks");
+        .dest(DEST_TIME_BETWEEN_CHECKS);
 
     final Argument brokerArgument = parser.addArgument("broker")
         .action(store())
-        .dest("brokers")
+        .dest(DEST_BROKERS)
         .help("The broker id(s) that the tool should check for.")
         .type(Integer.class)
         .nargs("+")
         .required(true);
-//
-//    return namespace -> {
-//      ImmutableWaitForISRToolOptions.Builder builder = ImmutableWaitForISRToolOptions.builder();
-//      builder.bootstrapServer(CommonArguments.bootstrapServer(namespace));
-//      builder.maxWaitTimeUnit(namespace.get(maxWaitTimeUnit.getDest()));
-//      builder.maxWaitTime(namespace.getLong(maxWaitTime.getDest()));
-//      builder.timeBetweenChecksUnit(namespace.get(timeBetweenChecksUnit.getDest()));
-//      builder.timeBetweenChecks(namespace.getLong(timeBetweenChecks.getDest()));
-//      builder.outputFile(CommonArguments.outputFile(namespace));
-//      builder.addAllBrokerIds(namespace.getList(brokerArgument.getDest()));
-//      return builder.build();
-//    };
   }
 
   @Override
   public void execute(Namespace namespace) throws Exception {
-//    log.debug("{}", option);
-//    try (AdminClient adminClient = KafkaAdminClient.create(
-//        ImmutableMap.of(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, option.bootstrapServer())
-//    )) {
-//      AdminClientHelper adminClientHelper = new AdminClientHelper(adminClient);
-//
-//      Stopwatch stopwatch = Stopwatch.createStarted();
-//
-//      final long maxElapsedTime = TimeUnit.MILLISECONDS.convert(option.maxWaitTime(), option.maxWaitTimeUnit());
-//
-//      Multimap<Integer, TopicPartition> underReplicatedPartitions;
-//      int underReplicatedPartitionCount;
-//      while (true) {
-//        underReplicatedPartitions = adminClientHelper.findUnderReplicatedPartitions(60, TimeUnit.SECONDS);
-//        underReplicatedPartitionCount = 0;
-//        for (Integer brokerId : option.brokerIds()) {
-//          Collection<TopicPartition> topicPartitions = underReplicatedPartitions.get(brokerId);
-//          int countForBroker = topicPartitions.size();
-//          underReplicatedPartitionCount += countForBroker;
-//          log.trace("Found {} under replicated partition(s) for broker {}.", underReplicatedPartitionCount, brokerId);
-//        }
-//
-//        if (underReplicatedPartitionCount == 0) {
-//          log.info("No under replicated partitions.");
-//          break;
-//        }
-//        log.warn("Found {} under replicated partition(s) across broker(s) {}.", underReplicatedPartitionCount, option.brokerIds());
-//        final long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-//        if (elapsed > maxElapsedTime) {
-//          log.error("{} under replicated partition(s) found.", underReplicatedPartitionCount);
-//          break;
-//        }
-//        long timeUntilAbort = maxElapsedTime - elapsed;
-//        long abortTimeSeconds = TimeUnit.SECONDS.convert(timeUntilAbort, TimeUnit.MILLISECONDS);
-//        long sleepIntervalSeconds = TimeUnit.SECONDS.convert(option.timeBetweenChecks(), option.timeBetweenChecksUnit());
-//        log.info("Waiting {} seconds for next check. Aborting in {} second(s).", sleepIntervalSeconds, abortTimeSeconds);
-//        long sleepInterval = TimeUnit.MILLISECONDS.convert(option.timeBetweenChecks(), option.timeBetweenChecksUnit());
-//        Thread.sleep(sleepInterval);
-//      }
-//
-//      WaitForISRState state = ImmutableWaitForISRState.builder()
-//          .addAllBrokerIDs(option.brokerIds())
-//          .underReplicatedPartitions(underReplicatedPartitionCount)
-//          .putAllUnderReplicatedPartitionsByBroker(underReplicatedPartitions)
-//          .hasUnderReplicatedPartitions(underReplicatedPartitionCount > 0)
-//          .build();
-//      if (null != option.outputFile()) {
-//        ObjectMapperFactory.write(option.outputFile(), state);
-//      } else {
-//        log.info("{}", state);
-//      }
-//    }
+    final String bootstrapServer = CommonArguments.bootstrapServer(namespace);
+    final TimeUnit maxWaitTimeUnit = namespace.get(DEST_MAX_WAIT_TIME_UNIT);
+    final long maxWaitTime = namespace.get(DEST_MAX_WAIT_TIME);
+    final long timeBetweenChecks = namespace.get(DEST_TIME_BETWEEN_CHECKS);
+    final TimeUnit timeBetweenChecksUnit = namespace.get(DEST_TIME_BETWEEN_CHECKS_UNIT);
+    final List<Integer> brokerIds = namespace.get(DEST_BROKERS);
+    final File outputFile = CommonArguments.outputFile(namespace);
+
+
+    try (AdminClient adminClient = KafkaAdminClient.create(
+        ImmutableMap.of(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer)
+    )) {
+      AdminClientHelper adminClientHelper = new AdminClientHelper(adminClient);
+
+      Stopwatch stopwatch = Stopwatch.createStarted();
+
+      final long maxElapsedTime = TimeUnit.MILLISECONDS.convert(maxWaitTime, maxWaitTimeUnit);
+
+      Multimap<Integer, TopicPartition> underReplicatedPartitions;
+      int underReplicatedPartitionCount;
+      while (true) {
+        underReplicatedPartitions = adminClientHelper.findUnderReplicatedPartitions(60, TimeUnit.SECONDS);
+        underReplicatedPartitionCount = 0;
+        for (Integer brokerId : brokerIds) {
+          Collection<TopicPartition> topicPartitions = underReplicatedPartitions.get(brokerId);
+          int countForBroker = topicPartitions.size();
+          underReplicatedPartitionCount += countForBroker;
+          log.trace("Found {} under replicated partition(s) for broker {}.", underReplicatedPartitionCount, brokerId);
+        }
+
+        if (underReplicatedPartitionCount == 0) {
+          log.info("No under replicated partitions.");
+          break;
+        }
+        log.warn("Found {} under replicated partition(s) across broker(s) {}.", underReplicatedPartitionCount, brokerIds);
+        final long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        if (elapsed > maxElapsedTime) {
+          log.error("{} under replicated partition(s) found.", underReplicatedPartitionCount);
+          break;
+        }
+        long timeUntilAbort = maxElapsedTime - elapsed;
+        long abortTimeSeconds = TimeUnit.SECONDS.convert(timeUntilAbort, TimeUnit.MILLISECONDS);
+        long sleepIntervalSeconds = TimeUnit.SECONDS.convert(timeBetweenChecks, timeBetweenChecksUnit);
+        log.info("Waiting {} seconds for next check. Aborting in {} second(s).", sleepIntervalSeconds, abortTimeSeconds);
+        long sleepInterval = TimeUnit.MILLISECONDS.convert(timeBetweenChecks, timeBetweenChecksUnit);
+        Thread.sleep(sleepInterval);
+      }
+
+      WaitForISRState state = ImmutableWaitForISRState.builder()
+          .addAllBrokerIDs(brokerIds)
+          .underReplicatedPartitions(underReplicatedPartitionCount)
+          .putAllUnderReplicatedPartitionsByBroker(underReplicatedPartitions)
+          .hasUnderReplicatedPartitions(underReplicatedPartitionCount > 0)
+          .build();
+      if (null != outputFile) {
+        ObjectMapperFactory.write(outputFile, state);
+      } else {
+        log.info("{}", state);
+      }
+    }
   }
 
 

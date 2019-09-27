@@ -1,5 +1,42 @@
 # Introduction
 
+# Kafka
+
+
+## wait-for-isr
+
+This tool is used to check if a broker(s) has under replicated partitions.
+```
+usage: wait-for-isr [-h] --bootstrap-server HOST1:PORT1[,HOST2:PORT2[...]]
+                    [--output Path to file]
+                    [--max-wait-time-unit {NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS}]
+                    [--max-wait-time MAXWAITTIME]
+                    [--time-between-checks-unit {NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS}]
+                    [--time-between-checks TIMEBETWEENCHECKS]
+                    brokers [brokers ...]
+
+This tool is used to check if a broker(s) has under replicated partitions.
+
+positional arguments:
+  brokers                The broker id(s) that the tool should check for.
+
+named arguments:
+  -h, --help             show this help message and exit
+  --bootstrap-server HOST1:PORT1[,HOST2:PORT2[...]]
+                         Comma-separated list of Kafka  brokers in the form
+                         HOST1:PORT1,HOST2:PORT2,...
+  --output Path to file, -f Path to file
+                         Path to write the output of the command to.
+  --max-wait-time-unit {NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS}
+                         The unit of time to wait.
+  --max-wait-time MAXWAITTIME
+                         The amount of time to wait.
+  --time-between-checks-unit {NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS}
+                         The unit of time to wait.
+  --time-between-checks TIMEBETWEENCHECKS
+                         The amount of time to wait.
+```
+
 # Kafka Connect
 
 

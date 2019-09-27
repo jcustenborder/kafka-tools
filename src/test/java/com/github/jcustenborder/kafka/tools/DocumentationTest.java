@@ -1,5 +1,6 @@
 package com.github.jcustenborder.kafka.tools;
 
+import com.github.jcustenborder.kafka.tools.broker.WaitForISRTool;
 import com.github.jcustenborder.kafka.tools.connect.ConnectTool;
 import com.google.common.base.Strings;
 import com.google.common.collect.LinkedListMultimap;
@@ -22,7 +23,7 @@ public class DocumentationTest {
 
   @BeforeEach
   public void before() {
-//    tools.put("Kafka", new WaitForISRTool());
+    toolLookup.put("Kafka", new WaitForISRTool());
     toolLookup.put("Kafka Connect", new ConnectTool());
   }
 
