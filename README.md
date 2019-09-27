@@ -46,7 +46,7 @@ The connect-client command provides additinal functionality to assist with the a
 ```
 usage: connect-client [-h] [--connect-config CONNECTCONFIG] [--host HOST]
                       [--port PORT] [--output-format {Table,Json}]
-                      {create,restart-connector,restart-task,configure,import,export,list,connector-plugins,delete,download-example,status}
+                      {create,restart-connector,restart-task,configure,import,export,list,connector-plugins,delete,download-example,status,pause,resume}
                       ...
 
 The connect-client command provides additinal  functionality to assist with
@@ -54,7 +54,7 @@ the administration of a Kafka  Connect  cluster.  All actions are performed
 over the Kafka Connect REST API.
 
 positional arguments:
-  {create,restart-connector,restart-task,configure,import,export,list,connector-plugins,delete,download-example,status}
+  {create,restart-connector,restart-task,configure,import,export,list,connector-plugins,delete,download-example,status,pause,resume}
 
 named arguments:
   -h, --help             show this help message and exit
@@ -102,7 +102,8 @@ named arguments:
 
 Command is used to restart a task for a connector.
 ```
-usage: restart-task [-h] [--connector CONNECTOR [CONNECTOR ...]]
+usage: restart-task [-h] --connector CONNECTOR [CONNECTOR ...]
+                    [--task TASK [TASK ...]] [--all-failed]
 
 Command is used to restart a task for a connector.
 
@@ -110,6 +111,10 @@ named arguments:
   -h, --help             show this help message and exit
   --connector CONNECTOR [CONNECTOR ...]
                          The name of the connector
+  --task TASK [TASK ...]
+                         The task id(s) that should be restarted.
+  --all-failed           Flag to include all  of  the  tasks  that are in a
+                         failed state.
 ```
 
 ### configure
@@ -228,6 +233,34 @@ Command is used to return the status of a connector and it's tasks.
 usage: status [-h] --connector CONNECTOR [CONNECTOR ...]
 
 Command is used to return the status of a connector and it's tasks.
+
+named arguments:
+  -h, --help             show this help message and exit
+  --connector CONNECTOR [CONNECTOR ...]
+                         The name of the connector
+```
+
+### pause
+
+Command is used to pause a connector on the Kafka Connect Cluster.
+```
+usage: pause [-h] --connector CONNECTOR [CONNECTOR ...]
+
+Command is used to pause a connector on the Kafka Connect Cluster.
+
+named arguments:
+  -h, --help             show this help message and exit
+  --connector CONNECTOR [CONNECTOR ...]
+                         The name of the connector
+```
+
+### resume
+
+Command is used to resume a connector on the Kafka Connect Cluster.
+```
+usage: resume [-h] --connector CONNECTOR [CONNECTOR ...]
+
+Command is used to resume a connector on the Kafka Connect Cluster.
 
 named arguments:
   -h, --help             show this help message and exit

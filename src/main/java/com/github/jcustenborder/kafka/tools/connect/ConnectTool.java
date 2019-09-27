@@ -50,7 +50,9 @@ public class ConnectTool extends MultiCommandTool {
         new ConnectPluginsTool(),
         new DeleteTool(),
         new DownloadExampleTool(),
-        new StatusTool()
+        new StatusTool(),
+        new PauseTool(),
+        new ResumeTool()
     );
   }
 
