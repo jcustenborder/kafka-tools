@@ -23,7 +23,7 @@ public class ConfigureTool extends AbstractConnectTool {
   }
 
   @Override
-  public void options(ArgumentParser parser) {
+  public void arguments(ArgumentParser parser) {
 
   }
 

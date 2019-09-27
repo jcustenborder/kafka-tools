@@ -36,7 +36,7 @@ public class DocumentationTest {
 
     ArgumentParser parser = ArgumentParsers.newFor(tool.name()).build();
     parser.description(tool.description());
-    tool.options(parser);
+    tool.arguments(parser);
 
     writer.println("```");
 

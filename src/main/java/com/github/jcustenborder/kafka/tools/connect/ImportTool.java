@@ -44,7 +44,7 @@ public class ImportTool extends AbstractConnectTool {
   }
 
   @Override
-  public void options(ArgumentParser parser) {
+  public void arguments(ArgumentParser parser) {
     addInputPathArgument(parser)
         .required(true);
 

@@ -26,7 +26,7 @@ public class ToolRunner {
     ArgumentParser parser = ArgumentParsers.newFor(tool.name())
         .addHelp(true)
         .build();
-    tool.options(parser);
+    tool.arguments(parser);
     parser.description(tool.description());
     Namespace namespace = parser.parseArgsOrFail(args);
 

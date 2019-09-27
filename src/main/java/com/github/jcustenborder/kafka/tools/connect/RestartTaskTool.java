@@ -24,7 +24,7 @@ public class RestartTaskTool extends AbstractConnectTool {
   }
 
   @Override
-  public void options(ArgumentParser parser) {
+  public void arguments(ArgumentParser parser) {
     addConnectorArgument(parser);
   }
 

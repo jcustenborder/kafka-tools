@@ -19,7 +19,7 @@ public class CreateConnectTool extends AbstractConnectTool {
   }
 
   @Override
-  public void options(ArgumentParser parser) {
+  public void arguments(ArgumentParser parser) {
 
   }
 

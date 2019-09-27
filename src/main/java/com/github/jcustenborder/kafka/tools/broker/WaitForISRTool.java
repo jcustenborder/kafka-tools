@@ -46,7 +46,7 @@ public class WaitForISRTool implements Tool {
   }
 
   @Override
-  public void options(ArgumentParser parser) {
+  public void arguments(ArgumentParser parser) {
     final Argument bootstrapServerArgument = CommonArguments.bootstrapServer(parser);
     final Argument outputFileArgument = CommonArguments.outputFile(parser, false);
 

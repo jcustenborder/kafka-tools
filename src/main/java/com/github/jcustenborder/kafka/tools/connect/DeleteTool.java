@@ -26,7 +26,7 @@ public class DeleteTool extends AbstractConnectTool {
 
 
   @Override
-  public void options(ArgumentParser parser) {
+  public void arguments(ArgumentParser parser) {
     addConnectorArgument(parser)
         .required(true);
   }

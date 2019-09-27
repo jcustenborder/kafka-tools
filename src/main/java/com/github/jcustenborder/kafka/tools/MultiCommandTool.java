@@ -17,14 +17,14 @@ public abstract class MultiCommandTool implements Tool {
   protected static final String DEST_TOOL = "tool";
 
   @Override
-  public void options(ArgumentParser parser) {
+  public void arguments(ArgumentParser parser) {
     Subparsers subparsers = parser.addSubparsers();
 
     for (Tool tool : tools()) {
       Subparser subParser = subparsers.addParser(tool.name())
           .setDefault(DEST_TOOL, tool)
           .description(tool.description());
-      tool.options(subParser);
+      tool.arguments(subParser);
     }
   }
 

@@ -55,7 +55,7 @@ public class ConnectTool extends MultiCommandTool {
   }
 
   @Override
-  public void options(ArgumentParser parser) {
+  public void arguments(ArgumentParser parser) {
     final String homeDirectory = System.getProperty("user.home");
     File connectOptionsFile = new File(
         homeDirectory,
@@ -109,7 +109,7 @@ public class ConnectTool extends MultiCommandTool {
         .type(ConsoleFormat.class)
         .setDefault(ConsoleFormat.Table);
 
-    super.options(parser);
+    super.arguments(parser);
   }
 
   @Override

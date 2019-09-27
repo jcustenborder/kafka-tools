@@ -36,7 +36,7 @@ public class DownloadExampleTool extends AbstractConnectTool {
   private static final String DEST_INCLUDE_DEFAULTS = "includeDefaults";
 
   @Override
-  public void options(ArgumentParser parser) {
+  public void arguments(ArgumentParser parser) {
     addOutputFormatArgument(parser);
     addOutputFileArgument(parser)
         .required(true);

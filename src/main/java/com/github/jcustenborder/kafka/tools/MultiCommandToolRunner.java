@@ -27,7 +27,7 @@ public class MultiCommandToolRunner {
           Subparser subParser = subparsers.addParser(t.name())
               .setDefault("tool", t)
               .description(t.description());
-          t.options(subParser);
+          t.arguments(subParser);
         });
 
     Namespace namespace = parser.parseArgsOrFail(args);

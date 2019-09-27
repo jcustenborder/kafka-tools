@@ -24,7 +24,7 @@ public interface Tool extends AutoCloseable {
 
   String description();
 
-  void options(ArgumentParser parser);
+  void arguments(ArgumentParser parser);
 
   void execute(Namespace namespace) throws Exception;
 }
