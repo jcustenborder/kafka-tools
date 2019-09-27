@@ -72,13 +72,16 @@ named arguments:
 
 Command is used to create or update a connector on the Kafka Connect Cluster.
 ```
-usage: create [-h]
+usage: create [-h] --config-path CONFIGPATH
 
 Command is used to  create  or  update  a  connector  on  the Kafka Connect
 Cluster.
 
 named arguments:
   -h, --help             show this help message and exit
+  --config-path CONFIGPATH
+                         Location on the  local  file  system  to  read the
+                         config from.
 ```
 
 ### restart-connector
