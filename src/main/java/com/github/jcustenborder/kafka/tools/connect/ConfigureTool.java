@@ -32,6 +32,9 @@ public class ConfigureTool extends AbstractConnectTool {
     ConnectConfig config = ImmutableConnectConfig.builder()
         .host(namespace.getString(ConnectConstants.DEST_HOST))
         .port(namespace.getInt(ConnectConstants.DEST_PORT))
+        .username(namespace.get(ConnectConstants.DEST_USERNAME))
+        .password(namespace.get(ConnectConstants.DEST_PASSWORD))
+        .scheme(namespace.get(ConnectConstants.DEST_SCHEME))
         .build();
 
     File connectConfigFile = namespace.get(ConnectConstants.DEST_CONNECT_CONFIG);

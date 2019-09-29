@@ -5,6 +5,7 @@ import com.github.jcustenborder.kafka.tools.MultiCommandTool;
 import com.github.jcustenborder.kafka.tools.ObjectMapperFactory;
 import com.github.jcustenborder.kafka.tools.Tool;
 import com.github.jcustenborder.kafka.tools.ToolRunner;
+import com.google.common.base.Strings;
 import net.sourceforge.argparse4j.inf.Argument;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -74,19 +75,31 @@ public class ConnectTool extends MultiCommandTool {
 
     String defaultHost;
     Integer defaultPort;
+    String username;
+    String password;
+    String scheme;
     if (connectOptionsFile.isFile()) {
       try {
         ConnectConfig config = ObjectMapperFactory.INSTANCE.readValue(connectOptionsFile, ConnectConfig.class);
         defaultHost = config.host();
         defaultPort = config.port();
+        username = config.username();
+        password = config.password();
+        scheme = config.scheme();
       } catch (IOException e) {
         log.warn("Could not load {}", connectOptionsFile, e);
         defaultHost = null;
         defaultPort = null;
+        username = null;
+        password = null;
+        scheme = null;
       }
     } else {
       defaultHost = null;
       defaultPort = null;
+      username = null;
+      password = null;
+      scheme = null;
     }
 
     Argument hostArgument = parser.addArgument("--host")
@@ -103,6 +116,28 @@ public class ConnectTool extends MultiCommandTool {
         .required(false)
         .setDefault(null == defaultPort ? 8083 : defaultPort)
         .type(Integer.class);
+    Argument schemeArgument = parser.addArgument("--scheme")
+        .action(store())
+        .help("Scheme to connect to the Kafka Connect host with.")
+        .dest(ConnectConstants.DEST_SCHEME)
+        .required(false)
+        .setDefault(Strings.isNullOrEmpty(scheme) ? "http" : scheme)
+        .type(String.class);
+    Argument usernameArgument = parser.addArgument("--username")
+        .action(store())
+        .help("Username to connect to the Kafka Connect host with.")
+        .dest(ConnectConstants.DEST_USERNAME)
+        .required(false)
+        .setDefault(Strings.isNullOrEmpty(username) ? null : username)
+        .type(String.class);
+    Argument passwordArgument = parser.addArgument("--password")
+        .action(store())
+        .help("Password to connect to the Kafka Connect host with.")
+        .dest(ConnectConstants.DEST_PASSWORD)
+        .required(false)
+        .setDefault(Strings.isNullOrEmpty(password) ? null : password)
+        .type(String.class);
+
     Argument outputFormatArgument = parser.addArgument("--output-format")
         .action(store())
         .dest(ConnectConstants.DEST_CONSOLE_OUTPUT_FORMAT)

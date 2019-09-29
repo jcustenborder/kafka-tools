@@ -8,20 +8,26 @@ import com.github.jcustenborder.kafka.tools.Tool;
 import net.sourceforge.argparse4j.inf.Argument;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static net.sourceforge.argparse4j.impl.Arguments.store;
 
 public abstract class AbstractConnectTool implements Tool {
-
+  private static final Logger log = LoggerFactory.getLogger(AbstractConnectTool.class);
 
   protected ExecutorService executorService;
+  List<AutoCloseable> closeables = new ArrayList<>();
 
   public AbstractConnectTool() {
-    executorService = Executors.newScheduledThreadPool(2);
+    this.executorService = Executors.newScheduledThreadPool(2);
+    this.closeables.add(() -> this.executorService.shutdown());
   }
 
   protected Argument addConnectorArgument(ArgumentParser parser) {
@@ -104,12 +110,22 @@ public abstract class AbstractConnectTool implements Tool {
   protected KafkaConnectClient client(Namespace namespace) {
     String host = namespace.getString(ConnectConstants.DEST_HOST);
     Integer port = namespace.getInt(ConnectConstants.DEST_PORT);
+    String scheme = namespace.get(ConnectConstants.DEST_SCHEME);
+    String username = namespace.get(ConnectConstants.DEST_USERNAME);
+    String password = namespace.get(ConnectConstants.DEST_PASSWORD);
 
     KafkaConnectClientFactory factory = new KafkaConnectClientFactory();
     factory.executorService(executorService);
     factory.host(host);
     factory.port(port);
-    return factory.createClient();
+    factory.scheme(scheme);
+    factory.username(username);
+    factory.password(password);
+    factory.shutdownExecutorServiceOnClose(true);
+    factory.shutdownTransportOnClose(true);
+    KafkaConnectClient client = factory.createClient();
+    this.closeables.add(client);
+    return client;
   }
 
   protected Table table(Namespace namespace) {
@@ -131,6 +147,12 @@ public abstract class AbstractConnectTool implements Tool {
 
   @Override
   public void close() throws Exception {
-    this.executorService.shutdown();
+    for (AutoCloseable autoCloseable : this.closeables) {
+      try {
+        autoCloseable.close();
+      } catch (Exception ex) {
+        log.error("Exception thrown while calling close()", ex);
+      }
+    };
   }
 }
