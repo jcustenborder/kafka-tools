@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+export CLASSPATH="$(dirname $0)/../lib/*"
+export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$(dirname $0)/../config/logging.properties"
+kafka-run-class com.github.jcustenborder.kafka.tools.broker.WaitForISRTool "$@"
