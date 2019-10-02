@@ -1,5 +1,5 @@
 #!groovy
-@Library('jenkins-pipeline') import com.github.jcustenborder.jenkins.pipeline.KafkaConnectPipeline
+@Library('jenkins-pipeline') import com.github.jcustenborder.jenkins.pipeline.MavenGitHubReleasePipeline
 
-def pipe = new KafkaConnectPipeline()
+def pipe = new MavenGitHubReleasePipeline()
 pipe.execute()
